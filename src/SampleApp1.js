@@ -1,5 +1,13 @@
 var thisRef = this;
-
+var line, time;
+// simple talk ai, no behaviour
+var lines= Array(
+"Hello :)",
+"How are you ?",
+"It's not like i want to talk to you or something",
+"Have fun!",
+"What ?"
+);
 
 window.onerror = function(msg, url, line, col, error) {
     var errmsg = "file:" + url + "<br>line:" + line + " " + msg;
@@ -348,6 +356,7 @@ function mouseEvent(e)
     } else if (e.type == "mouseup") {
         if("button" in e && e.button != 0) return;  
         lookFront();
+		talk();
     } else if (e.type == "mouseout") {
     	if (thisRef.drag) thisRef.drag = false;
         lookFront();
@@ -429,8 +438,6 @@ function getWebGLContext()
 	return null;
 };
 
-
-
 function l2dLog(msg) {
     if(!LAppDefine.DEBUG_LOG) return;
     
@@ -440,8 +447,6 @@ function l2dLog(msg) {
     console.log(msg);
 }
 
-
-
 function l2dError(msg)
 {
     if(!LAppDefine.DEBUG_LOG) return;
@@ -450,3 +455,20 @@ function l2dError(msg)
     
 	console.error(msg);
 };
+
+function talk() {
+	if (time) {
+		clearTimeout(time); //clear last timeout
+	}
+	line = lines[Math.floor(Math.random()*lines.length)];
+	document.getElementById("talk").innerHTML = line;
+	document.getElementById("talk").style.opacity = "1";
+	document.getElementById("talk").style.transition = "";
+	thisRef.drag = false; //look front
+	time = setTimeout(function (){
+		document.getElementById("talk").style.opacity = "0";
+		document.getElementById("talk").style.transition = "opacity 1s";
+		thisRef.drag = true;
+		clearTimeout(time);
+	}, 5000); // How long do you want the delay to be (in milliseconds)? 
+}

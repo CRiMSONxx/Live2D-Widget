@@ -19,6 +19,7 @@
             }
 
             #glcanvas {
+				margin-left: 5px;
                 cursor:pointer;
                 cursor:hand;
             }
@@ -77,6 +78,39 @@
                     to(#c0392b));
                 border: 1px solid #c0392b;
             }
+			/* Tooltip container */
+			.tooltip {
+				position: relative;
+				display: inline-block;
+				border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+			}
+
+			/* Tooltip text */
+			.tooltiptext {
+				opacity: 0;
+				width: 120px;
+				background-color: black;
+				color: #fff;
+				text-align: center;
+				padding: 5px 0;
+				border-radius: 6px;
+				margin-top: 100px; /*static*/
+				margin-left: 180px;/*static*/
+			 
+				/* Position the tooltip text - see examples below! */
+				position: absolute;
+				z-index: 1;
+			}
+			.tooltiptext::after {
+				content: " ";
+				position: absolute;
+				top: 100%; /* At the bottom of the tooltip */
+				left: 50%;
+				margin-left: -5px;
+				border-width: 5px;
+				border-style: solid;
+				border-color: black transparent transparent transparent;
+			}
         </style>
 
     </head>
@@ -85,11 +119,10 @@
         <!--
             <button id="btnChange" class="active">Exit</button>
         -->
-        <div id="handle"></div>
+        <div id="handle"></div>        
+		<span id="talk" class="tooltiptext">hello!</span>
 
         <canvas id="glcanvas" width="490" height="710" style=""></canvas>
-
-        <div id="myconsole" style="color:#000; display:none;">---- Log ----</div>
 
         <!-- Live2D Library -->
         <script src="lib/live2d.min.js"></script>

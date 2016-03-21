@@ -1,4 +1,7 @@
+credits.html
 icudtl.dat
 nw*
 *.dll
 *.so
+/assets/*
+/locales/*
