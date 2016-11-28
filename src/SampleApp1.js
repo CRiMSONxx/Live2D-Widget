@@ -1,5 +1,21 @@
 var thisRef = this;
+var line, time;
 
+var win = nw.Window.get();
+const appWidth = 505;
+const appHeight = 730;
+win.moveTo(window.screen.availWidth - appWidth, window.screen.availHeight - appHeight);
+
+var thisRef = this;
+var line, time;
+// simple talk ai, no behaviour
+var lines= Array(
+"Hello :)",
+"How are you ?",
+"It's not like i want to talk to you or something",
+"Have fun!",
+"What ?"
+);
 
 window.onerror = function(msg, url, line, col, error) {
     var errmsg = "file:" + url + "<br>line:" + line + " " + msg;
@@ -35,11 +51,9 @@ function sampleApp1()
     init();
 }
 
-
 function initL2dCanvas(canvasId)
 {
-    
-	this.canvas = document.getElementById(canvasId);
+    this.canvas = document.getElementById(canvasId);
     
     
     if(this.canvas.addEventListener) {
@@ -58,52 +72,80 @@ function initL2dCanvas(canvasId)
         this.canvas.addEventListener("touchstart", touchEvent, false);
         this.canvas.addEventListener("touchend", touchEvent, false);
         this.canvas.addEventListener("touchmove", touchEvent, false);
-		
-		// Create an empty context menu
-		var nw = require('nw.gui');
-		var menu = new nw.Menu();
-		// Get the current window
-		var win = nw.Window.get();
-		//win.moveTo(window.screen.availWidth / 1.5, window.screen.availWidth / 5);
+        //start tray
+        // Create a tray icon
+        var tray = new nw.Tray({ title: 'myMaid', icon: 'img/icon.png' });
 
-		// Add some items with label
-		menu.append(new nw.MenuItem({
-		  label: 'Change Model',
-		  click: function(){
-			changeModel();
-		  }
-		}));
-		menu.append(new nw.MenuItem({ 
-		  label: 'Always on Top',
-		  click: function() {
-			win.minimize();
-			if (confirm('Do you want to set this app always on top ?')) {
-				win.setAlwaysOnTop(true);
-			} else {
-				win.setAlwaysOnTop(false);
-			}
-			win.restore();
-		  }
-		}));
-		menu.append(new nw.MenuItem({ type: 'separator' }));
-		menu.append(new nw.MenuItem({ 
-		  label: 'Exit',
-		  click: function() {
-			if (confirm('Are you sure you want to exit?')) {
-				nw.App.closeAllWindows();
-			}
-		  }
-		}));
-		// Hooks the "contextmenu" event
-		this.canvas.addEventListener('contextmenu', function(ev) {
-		  // Prevent showing default context menu
-		  ev.preventDefault();
-		  // Popup the native context menu at place you click
-		  menu.popup(ev.x, ev.y);
+        // Give it a menu
+        var trayMenu = new nw.Menu();
+        trayMenu.append(new nw.MenuItem({ 
+          label: 'Show App',
+          click: function() {
+            win.focus();
+          }
+        }));
+        trayMenu.append(new nw.MenuItem({ type: 'separator' }));
+        trayMenu.append(new nw.MenuItem({ 
+          label: 'Exit',
+          click: function() {
+            if (confirm('Are you sure you want to exit?')) {
+                nw.App.closeAllWindows();
+                // Remove the tray
+                tray.remove();
+                tray = null;
+            }
+          }
+        }));
+        tray.menu = trayMenu;
+        //end tray
 
-		  return false;
-		}, false);
-    }
+        // Create an empty context menu
+        var menu = new nw.Menu();
+        // Get the current window
+        var win = nw.Window.get();
+        //win.moveTo(window.screen.availWidth / 1.5, window.screen.availWidth / 5);
+
+        // Add some items with label
+        menu.append(new nw.MenuItem({
+          label: 'Change Model',
+          click: function(){
+            changeModel();
+          }
+        }));
+        menu.append(new nw.MenuItem({ 
+          label: 'Always on Top',
+          click: function() {
+            win.minimize();
+            if (confirm('Do you want to set this app always on top ?')) {
+                win.setAlwaysOnTop(true);
+            } else {
+                win.setAlwaysOnTop(false);
+            }
+            win.restore();
+          }
+        }));
+        menu.append(new nw.MenuItem({ type: 'separator' }));
+        menu.append(new nw.MenuItem({ 
+          label: 'Exit',
+          click: function() {
+            if (confirm('Are you sure you want to exit?')) {
+                nw.App.closeAllWindows();
+                // Remove the tray
+                tray.remove();
+                tray = null;
+            }
+          }
+        }));
+        // Hooks the "contextmenu" event
+        this.canvas.addEventListener('contextmenu', function(ev) {
+          // Prevent showing default context menu
+          ev.preventDefault();
+          // Popup the native context menu at place you click
+          menu.popup(ev.x, ev.y);
+
+          return false;
+        }, false);
+    } 
     
     //btnChangeModel = document.getElementById("btnChange");
     //btnChangeModel.addEventListener("click", function(e) {
@@ -348,6 +390,7 @@ function mouseEvent(e)
     } else if (e.type == "mouseup") {
         if("button" in e && e.button != 0) return;  
         lookFront();
+		talk();
     } else if (e.type == "mouseout") {
     	if (thisRef.drag) thisRef.drag = false;
         lookFront();
@@ -429,8 +472,6 @@ function getWebGLContext()
 	return null;
 };
 
-
-
 function l2dLog(msg) {
     if(!LAppDefine.DEBUG_LOG) return;
     
@@ -440,8 +481,6 @@ function l2dLog(msg) {
     console.log(msg);
 }
 
-
-
 function l2dError(msg)
 {
     if(!LAppDefine.DEBUG_LOG) return;
@@ -450,3 +489,20 @@ function l2dError(msg)
     
 	console.error(msg);
 };
+
+function talk() {
+	if (time) {
+		clearTimeout(time); //clear last timeout
+	}
+	line = lines[Math.floor(Math.random()*lines.length)];
+	document.getElementById("talk").innerHTML = line;
+	document.getElementById("talk").style.opacity = "1";
+	document.getElementById("talk").style.transition = "";
+	thisRef.drag = false; //look front
+	time = setTimeout(function (){
+		document.getElementById("talk").style.opacity = "0";
+		document.getElementById("talk").style.transition = "opacity 1s";
+		thisRef.drag = true;
+		clearTimeout(time);
+	}, 5000); // How long do you want the delay to be (in milliseconds)? 
+}
