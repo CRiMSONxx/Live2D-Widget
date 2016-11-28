@@ -1,19 +1,12 @@
 {
     "name": "Live2D",
-    "version": "0.0.2a",
     "main": "index.html",
     "window": {
-		"show": false,
-        "toolbar": false,
         "frame": false,
         "transparent": true,
-        "resizable":true,
-        "width":490,
+        "width":505,
         "height":730,
         "show_in_taskbar": false,
-        "always-on-top": false
-    },
-    "dependencies": {
-    	"glob": "^7.0.0"
+        "show":true
     }
 }
