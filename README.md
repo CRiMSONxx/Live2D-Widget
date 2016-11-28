@@ -1,16 +1,15 @@
+
+## UPDATE November 29th, 2016
+After a looooonnnggg hiatus, (tbh i forgot about this project) today i already updated to support latest version of NWJS 0.18.8
+it also add tray icon.
+!!! winstate.js (save window position) is still not working due to NWJS, for the time being i use screen width and height to automatically place the window.
+Last but not least, if this widget is dead (no contribution) i will make my own widget based from akiroz idea by using NWJS
 ## Live2D-Widget
 a little cross-platform desktop widget based on the Live2D Sample App in the SDK
 
 [nw.js](https://github.com/nwjs/nw.js) builds are avaliable on [http://nwjs.io/](http://nwjs.io/)
 
-Tested on all 3 platforms with nw.js version 0.12.x
-
 ![](https://raw.githubusercontent.com/akiroz/Live2D-Widget/master/screenshot.png)
-
-## UPDATE March 20th, 2016
-* context menu (exit button added)
-* preserve window state and position
-* auto-load models (scans for *.model.json)
 
 ### Usage:
 * adjust window size in package.json
