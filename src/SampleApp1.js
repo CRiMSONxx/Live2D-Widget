@@ -74,7 +74,7 @@ function initL2dCanvas(canvasId)
         this.canvas.addEventListener("touchmove", touchEvent, false);
         //start tray
         // Create a tray icon
-        var tray = new nw.Tray({ title: 'myMaid', icon: 'img/icon.png' });
+        var tray = new nw.Tray({ title: 'myMaid', icon: 'icon.png' });
 
         // Give it a menu
         var trayMenu = new nw.Menu();
